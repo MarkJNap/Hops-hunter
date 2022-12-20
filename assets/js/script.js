@@ -1,8 +1,6 @@
 let buttonEl = document.getElementById("testing-btn")
 
 
-
-
 buttonEl.addEventListener("click", getApi)
 
 function getApi(requestUrl) {
