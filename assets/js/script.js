@@ -1,4 +1,4 @@
-let buttonEl = document.getElementById("testing-btn")
+let buttonEl = document.getElementById("brewery-btn")
 
 // Brewery API info https://www.openbrewerydb.org/documentation
 
@@ -14,4 +14,4 @@ function getApi(requestUrl) {
     .then(function (data) {
         console.log(data);
     })
-    }
+}
