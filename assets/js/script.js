@@ -1,6 +1,7 @@
-let buttonEl = document.getElementById("brewery-btn")
-
 // Brewery API info https://www.openbrewerydb.org/documentation
+
+let mapButtonEl = document.getElementById("map-btn")
+let breweryButtonEl = document.getElementById("brewery-btn")
 
 buttonEl.addEventListener("click", getApi)
 
