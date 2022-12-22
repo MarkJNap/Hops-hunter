@@ -4,18 +4,105 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="/assets/css/style.css">
-    <title>Document</title>
+    <!-- Bulma css https://bulma.io/documentation/-->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css">
+    <link rel="stylesheet" href="assets/css/style.css">
+    <title>Hops Hunter</title>
 </head>
 
 <body>
-    <header>
-        <h1>Brewery Site</h1>
+    <!-- navbar -->
+    <header class="navbar has-shadow">
+        <section class="navbar-brand">
+            <h1 class="title navbar-item">Brewery Finder</h1>  
+        </section>
+        <section class="navbar-menu">
+            <div class="navbar-end">
+                <a href="#" class="navbar-item">Link 1</a>
+                <a href="#" class="navbar-item">Link 2</a>
+            </div>
+        </section>
     </header>
 
-    <main>
-        <button type="button" id="testing-btn">Search</button>
+    <main class="section columns">
+        <!-- Search input, searched history and saved breweries -->
+        <aside class="container column is-3">
+            <section class="box">
+                <form>
+                    <div class="field">
+                        <label class="label"for="search-box">Search for a location: </label>
+                        <div class="control">
+                            <input type="search" id="search-box">
+                        </div>
+                    </div>
+                    <div class="field">
+                        <div class="control">
+                            <label class="checkbox">
+                                <input type="checkbox">
+                                City
+                            </label>
+                        </div>
+                        <div class="control">
+                            <label class="checkbox">
+                                <input type="checkbox">
+                                State
+                            </label>
+                        </div>
+                        <div class="control">
+                            <label class="checkbox">
+                                <input type="checkbox">
+                                Postcode
+                            </label>
+                        </div>
+                    </div>
+                    <div>
+                        <button class="button is-primary is-rounded"type="button" id="testing-btn">Search</button>
+                    </div>
+                </form>
+            </section>
+            <section class="box">
+                <h2 class="is-size-4">Previous Searches:</h2>
+                <p> Example Search</p>
+            </section>
+            <section class="box">
+                <h2 class="is-size-4">Favourited Breweries:</h2>
+                <p> Example Saved Brewery</p>
+            </section>
+        </aside>
+        <!-- Main Searched information -->
+        <section class="box container column is-8">
+            <h2 class="title box"> Breweries Near (USER SEARCH)</h2>
+            <article>
+                <h2>Brewery Name</h2>
+                <p>type, address, number</p>
+            </article>
+            <article>
+                <h2>Brewery Name</h2>
+                <p>type, address, number</p>
+            </article>
+            <article>
+                <h2>Brewery Name</h2>
+                <p>type, address, number</p>
+            </article>
+            <article>
+                <h2>Brewery Name</h2>
+                <p>type, address, number</p>
+            </article>
+            <article>
+                <h2>Brewery Name</h2>
+                <p>type, address, number</p>
+            </article>
+            <article>
+                <h2>Brewery Name</h2>
+                <p>type, address, number</p>
+            </article>
+        </section>
     </main>
+    
+    <!-- Footer -->
+    <footer class="footer">
+        <h4 class="has-text-centered">Made by Mark, Panos, Sam, Tesfa</h4>
+    </footer>
 
     <script src="/assets/js/script.js"></script>
 </body>
