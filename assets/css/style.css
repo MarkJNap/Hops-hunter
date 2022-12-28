@@ -1,3 +1,8 @@
 button {
     color: cyan;
 }
+
+#map {
+    height: 100%;
+    width: 100%;
+  }

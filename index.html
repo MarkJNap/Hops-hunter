@@ -6,7 +6,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <!-- Bulma css https://bulma.io/documentation/-->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css">
-    <link rel="stylesheet" href="assets/css/style.css">
+    <link rel="stylesheet" href="./assets/css/style.css">
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=default"></script>
     <title>Hops Hunter</title>
 </head>
 
@@ -71,7 +72,7 @@
             </section>
         </aside>
         <!-- Main Searched information -->
-        <section class="box container column is-8">
+        <section class="box container column is-4">
             <h2 class="title box"> Breweries Near (USER SEARCH)</h2>
             <article>
                 <h2>Brewery Name</h2>
@@ -98,6 +99,9 @@
                 <p>type, address, number</p>
             </article>
         </section>
+        <section class="box container column is-4">
+            <div id="map"> </div>
+        </section>
     </main>
     
     <!-- Footer -->
@@ -105,6 +109,7 @@
         <h4 class="has-text-centered">Made by Mark, Panos, Sam, Tesfa</h4>
     </footer>
 
-    <script src="/assets/js/script.js"></script>
+    <script src="./assets/js/script.js"></script>
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyC-YDTUfwYgINCwNa3Gsoh-jvuEWaHMEis" defer> </script>
 </body>
 </html>
