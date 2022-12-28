@@ -5,4 +5,14 @@ button {
 #map {
     height: 100%;
     width: 100%;
-  }
+}
+
+body {
+    background-color: rgb(104, 69, 136);
+}
+
+footer {
+    font: italic;
+    text-align: center;
+    color: rgb(220, 24, 28);
+}
