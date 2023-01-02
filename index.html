@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -11,105 +12,167 @@
     <title>Hops Hunter</title>
 </head>
 
-<body>
-    <!-- navbar -->
-    <header class="navbar has-shadow">
-        <section class="navbar-brand">
-            <h1 class="title navbar-item">Brewery Finder</h1>  
-        </section>
-        <section class="navbar-menu">
-            <div class="navbar-end">
-                <a href="#" class="navbar-item">Link 1</a>
-                <a href="#" class="navbar-item">Link 2</a>
-            </div>
-        </section>
-    </header>
+<body onload="getApi()">
+    <form autocomplete="off">
+        <!-- navbar -->
+        <header class="navbar has-shadow">
+            <section class="navbar-brand">
+                <h1 class="title navbar-item">Brewery Finder</h1>
+            </section>
+            <section class="navbar-menu">
+                <div class="navbar-end">
+                    <a href="#" class="navbar-item">Link 1</a>
+                    <a href="#" class="navbar-item">Link 2</a>
+                </div>
+            </section>
+        </header>
 
-    <main class="section columns">
-        <!-- Search input, searched history and saved breweries -->
-        <aside class="container column is-3">
-            <section class="box">
-                <form>
-                    <div class="field">
-                        <label class="label"for="search-box">Search for a location: </label>
-                        <div class="control">
-                            <input type="search" id="search-box">
-                        </div>
-                    </div>
-                    <div class="field">
-                        <div class="control">
-                            <label class="checkbox">
-                                <input type="checkbox">
-                                City
-                            </label>
-                        </div>
-                        <div class="control">
-                            <label class="checkbox">
-                                <input type="checkbox">
-                                State
-                            </label>
-                        </div>
-                        <div class="control">
-                            <label class="checkbox">
-                                <input type="checkbox">
-                                Postcode
-                            </label>
+        <main class="section columns">
+            <!-- Search input, searched history and saved breweries -->
+            <aside class="container column is-3">
+
+                <section class="box is-ancestor">
+
+                    <div class="tile is-ancestor">
+                        <div class="tile is-vertical">
+                            <div class="tile">
+                                <div class="tile is-child is-vertical is-5">
+
+                                    <fieldset class="fieldset">
+                                        <legend>Select option</legend>
+                                        <div class="control">
+                                            <label class="radio"> <input id="rAllData" type="radio" name="mapOption"
+                                                    checked> All Data </label>
+                                        </div>
+
+                                        <div>
+                                            <label class="radio"> <input id="rCountry" type="radio" name="mapOption">
+                                                Country</label>
+                                        </div>
+
+                                        <div class="control">
+                                            <label class="radio"> <input id="rState" type="radio" name="mapOption">
+                                                State </label>
+                                        </div>
+
+                                        <div>
+                                            <label class="radio"> <input id="rCity" type="radio" name="mapOption">
+                                                City </label>
+                                        </div>
+
+                                        <div>
+                                            <label class="radio"> <input id="rPostCode" type="radio" name="mapOption">
+                                                Post code
+                                            </label>
+
+                                        </div>
+                                    </fieldset>
+
+                                </div>
+                                <div class="tile is-child">
+                                    <fieldset class="fieldset">
+                                        <legend>Select</legend>
+                                        <input class="is-pulled-right" type="text" id="iInput" placeholder="Country">
+                                        <ul class="list"></ul>
+
+                                    </fieldset>
+                                </div>
+                            </div>
                         </div>
                     </div>
                     <div>
-                        <button class="button is-primary is-rounded"type="button" id="brewery-btn">Brewery Test</button>
-                        <button class="button is-warning "type="button" id="map-btn">Map Test</button>
+                        <button class="button is-primary is-rounded" type="button" id="brewery-btn">Brewery
+                            list</button>
+                        <button class="button is-warning " type="button" id="map-btn">Map</button>
                     </div>
-                </form>
-            </section>
-            <section class="box">
-                <h2 class="is-size-4">Previous Searches:</h2>
-                <p> Example Search</p>
-            </section>
-            <section class="box">
-                <h2 class="is-size-4">Favourited Breweries:</h2>
-                <p> Example Saved Brewery</p>
-            </section>
-        </aside>
-        <!-- Main Searched information -->
-        <section class="box container column is-4">
-            <h2 class="title box"> Breweries Near (USER SEARCH)</h2>
-            <article>
-                <h2>Brewery Name</h2>
-                <p>type, address, number</p>
-            </article>
-            <article>
-                <h2>Brewery Name</h2>
-                <p>type, address, number</p>
-            </article>
-            <article>
-                <h2>Brewery Name</h2>
-                <p>type, address, number</p>
-            </article>
-            <article>
-                <h2>Brewery Name</h2>
-                <p>type, address, number</p>
-            </article>
-            <article>
-                <h2>Brewery Name</h2>
-                <p>type, address, number</p>
-            </article>
-            <article>
-                <h2>Brewery Name</h2>
-                <p>type, address, number</p>
-            </article>
-        </section>
-        <section class="box container column is-4">
-            <div id="map"> </div>
-        </section>
-    </main>
-    
-    <!-- Footer -->
-    <footer class="footer">
-        <h4 class="has-text-centered">Made by Mark, Panos, Sam, Tesfa</h4>
-    </footer>
+                </section>
 
-    <script src="./assets/js/script.js"></script>
-    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyC-YDTUfwYgINCwNa3Gsoh-jvuEWaHMEis" defer> </script>
+
+                <section class="box">
+                    <h2 class="is-size-4">Previous Searches:</h2>
+                    <p> Example Search</p>
+                </section>
+                <section class="box">
+                    <h2 class="is-size-4">Favourited Breweries:</h2>
+                    <p> Example Saved Brewery</p>
+                </section>
+            </aside>
+
+
+            <!-- Main Searched information -->
+            <section class="box container column is-4">
+                <h2 class="title box"> Breweries Near (USER SEARCH)</h2>
+                <h6> sected breweries: </h2>
+                    <div class="field">
+                        <p class="control">
+                            <span class="select is-fullwidth">
+                                <select id="listControl" multiple size="10" onchange="getSelectedID(this)">
+                                    <!-- <option value="Argentina">Argentina</option>
+                                <option value="Bolivia">Bolivia</option>
+                                <option value="Brazil">Brazil</option>
+                                <option value="Chile">Chile</option>
+                                <option value="Colombia">Colombia</option>
+                                <option value="Ecuador">Ecuador</option>
+                                <option value="Guyana">Guyana</option>
+                                <option value="Paraguay">Paraguay</option>
+                                <option value="Peru">Peru</option>
+                                <option value="Suriname">Suriname</option>
+                                <option value="Uruguay">Uruguay</option>
+                                <option value="Venezuela">Venezuela</option> -->
+                                </select>
+                            </span>
+                        </p>
+                    </div>
+
+                    </span>
+
+
+
+
+                    <!-- <article>
+                    <h2>Brewery Name</h2>
+                    <p>type, address, number</p>
+                </article>
+                <article>
+                    <h2>Brewery Name</h2>
+                    <p>type, address, number</p>
+                </article>
+                <article>
+                    <h2>Brewery Name</h2>
+                    <p>type, address, number</p>
+                </article>
+                <article>
+                    <h2>Brewery Name</h2>
+                    <p>type, address, number</p>
+                </article>
+                <article>
+                    <h2>Brewery Name</h2>
+                    <p>type, address, number</p>
+                </article>
+                <article>
+                    <h2>Brewery Name</h2>
+                    <p>type, address, number</p>
+                </article> -->
+
+
+
+
+            </section>
+
+            <section class="box container column is-4">
+                <div id="map"> </div>
+            </section>
+        </main>
+
+        <!-- Footer -->
+        <footer class="footer">
+            <h4 class="has-text-centered">Made by Mark, Panos, Sam, Tesfa</h4>
+        </footer>
+
+        <script src="./assets/js/script.js"></script>
+        <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyC-YDTUfwYgINCwNa3Gsoh-jvuEWaHMEis"
+            defer> </script>
+    </form>
 </body>
+
 </html>
