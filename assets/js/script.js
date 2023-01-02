@@ -2,21 +2,87 @@
 
 let mapButtonEl = document.getElementById("map-btn")
 let breweryButtonEl = document.getElementById("brewery-btn")
+var dMeta = {};
+var totalRecords;
+var allData = [];
+//all values
+var brewery_type = [];
+var city = [];
+var country = [];
+var postal_code = []
+var state = [];
+//Unique values
+var ubrewery_type = [];
+var ucity = [];
+var ucountry = [];
+var upostal_code = []
+var ustate = [];
 
-breweryButtonEl.addEventListener("click", getApi)
+var brLat = -34.397;
+var brLon = 150.644;
+
+
+//breweryButtonEl.addEventListener("click", getApi)
+breweryButtonEl.addEventListener("click", getFilteredBreweries);
 mapButtonEl.addEventListener("click", initMap);
 
-function getApi(requestUrl) {
-    requestUrl = "https://api.openbrewerydb.org/breweries"
-    fetch(requestUrl)
-      .then(function (response) {
-        console.log(response);
-        return response.json()
+function displayData() {
+  //alert(allData.length);
+  ubrewery_type = Array.from(new Set(brewery_type));
+  ucity = Array.from(new Set(city));
+  ucountry = Array.from(new Set(country));
+  upostal_code = Array.from(new Set(postal_code));
+  ustate = Array.from(new Set(state));
+}
+
+//This function is activated when loading the body of the document, 
+//to read in all available data and prepopulate the arrays with unique values
+
+function getApi() {
+  requestUrl = "https://api.openbrewerydb.org/breweries/meta"
+  fetch(requestUrl)
+    .then(function (response) {
+      console.log(response);
+      return response.json()
     })
-    .then(function (data) {
-        console.log(data);
+    .then(function (dataM) {
+      totalRecords = dataM.total;
+      // console.log(data);
+      getApiRecords();
     })
 }
+
+//Loop through the records and get all data into array
+//https://api.openbrewerydb.org/breweries?page=15&per_page=50
+
+var perPage = 50;
+function getApiRecords() {
+  var nPages = Math.ceil(totalRecords / perPage);
+  for (i = 1; i < nPages + 1; i++) {
+    var requestUrl = "https://api.openbrewerydb.org/breweries?page=" + i + "&per_page=" + perPage;
+    fetch(requestUrl)
+      .then(function (response) {
+        //console.log(response);
+        return response.json()
+      })
+      .then(function (data) {
+        for (j = 0; j < data.length; j++) {
+
+          allData.push(data[j]);
+
+          brewery_type.push(data[j].brewery_type);
+          city.push(data[j].city);
+          country.push(data[j].country);
+          postal_code.push(data[j].postal_code);
+          state.push(data[j].state);
+        }
+        console.log(data);
+      });
+
+  }
+
+}
+
 
 //===============MAP=============================
 let map;
@@ -26,11 +92,10 @@ let map;
 // a convenient way to add a LatLng coordinate and, in most cases, can be used
 // in place of a google.maps.LatLng object.
 
-
 function initMap() {
   const mapOptions = {
     zoom: 8,
-    center: { lat: -34.397, lng: 150.644 },
+    center: { lat: +brLat, lng: +brLon },
   };
 
   map = new google.maps.Map(document.getElementById("map"), mapOptions);
@@ -38,7 +103,7 @@ function initMap() {
   const marker = new google.maps.Marker({
     // The below line is equivalent to writing:
     // position: new google.maps.LatLng(-34.397, 150.644)
-    position: { lat: -34.397, lng: 150.644 },
+    position: { lat: +brLat, lng: +brLon },
     map: map,
   });
   // You can use a LatLng literal in place of a google.maps.LatLng object when
@@ -54,7 +119,158 @@ function initMap() {
     infowindow.open(map, marker);
   });
 }
-
-
 window.initMap = initMap;
+
+
+//Get and manage selected option from the radioButtons
+document.querySelectorAll("input[name='mapOption']").forEach((input) => {
+  input.addEventListener('change', myfunction);
+});
+var selectedList = [];
+let inputEl = document.getElementById("iInput");
+inputEl.value = "";
+inputEl.placeholder = "All data";
+var selectedRadioId;
+function myfunction(event) {
+
+  displayData();
+  selectedRadioId = event.currentTarget.id;
+  console.log('Checked radio with ID = ' + selectedRadioId);
+  if (selectedRadioId === "rAllData") {
+    inputEl.value = "";
+    selectedList = allData;
+    inputEl.placeholder = "All data";
+  }
+
+  else if (selectedRadioId === "rCountry") {
+    selectedList = Array.from(new Set(country)).sort();
+    inputEl.value = "";
+    inputEl.placeholder = "Country";
+  }
+  else if (selectedRadioId === "rState") {
+    selectedList = Array.from(new Set(state)).sort();
+    inputEl.value = "";
+    inputEl.placeholder = "State";
+  }
+  else if (selectedRadioId === "rCity") {
+    selectedList = Array.from(new Set(city)).sort();
+    inputEl.value = "";
+    inputEl.placeholder = "City";
+  }
+  else if (selectedRadioId === "rPostCode") {
+    selectedList = Array.from(new Set(postal_code)).sort();
+    inputEl.value = "";
+    inputEl.placeholder = "Post code";
+  }
+  else {
+    alert("This option is not available yet ! ");
+  }
+  // inputEl = document.getElementById(selectedInputId);
+  //populateList(selectedInputId);
+  //alert('Checked radio with ID = ' + selectedRadioId)
+}
+
+
+
+
+//Populate input boxe based on selected option
+//=========================================================
+//code adaped and modified form https://codingartistweb.com/2021/12/autocomplete-suggestions-on-input-field-with-javascript/
+
+//Execute function on keyup
+inputEl.addEventListener("keyup", (e) => {
+  //Initially remove all elements ( so if user erases a letter or adds new letter then clean previous outputs)
+  removeElements();
+  for (let i of selectedList) {
+    //convert input to lowercase and compare with each string
+    if (i.toLowerCase().startsWith(inputEl.value.toLowerCase()) && inputEl.value != "") {
+      //create li element=============
+      let listItem = document.createElement("li");
+      //One common class name
+      listItem.classList.add("list-items");
+      listItem.style.cursor = "pointer";
+      listItem.setAttribute("onclick", "displayNames('" + i + "')");
+      //Display matched part in bold
+      let word = "<b>" + i.substr(0, inputEl.value.length) + "</b>";
+      word += i.substr(inputEl.value.length);
+      //display the value in array
+      listItem.innerHTML = word;
+      document.querySelector(".list").appendChild(listItem);
+    }
+  }
+});
+//}
+
+function displayNames(value) {
+  inputEl.value = value;
+  removeElements();
+}
+function removeElements() {
+  //clear all the item
+  let items = document.querySelectorAll(".list-items");
+  items.forEach((item) => {
+    item.remove();
+  });
+}
+
+
+
+//Populate selected filtered breweries options list [middle field]
+function getFilteredBreweries() {
+
+  listEl = document.getElementById("listControl");
+  //Clear Existing Elements
+  removeOptions(listEl);
+
+  const result = allData.filter((brewery) => {
+    //return person.age < 21 ? true : false
+    var filterValue = inputEl.value;
+    if (selectedRadioId === "rAllData") {
+      return allData;
+    }
+    else if (selectedRadioId === "rCountry") {
+      return brewery.country === filterValue;
+    }
+    else if (selectedRadioId === "rState") {
+      return brewery.state === filterValue;
+    }
+    else if (selectedRadioId === "rCity") {
+      return brewery.city === filterValue;
+    }
+    else if (selectedRadioId === "rPostCode") {
+      return brewery.postal_code === filterValue;
+    }
+  })
+  //populate selections 
+
+  for (rec of result) {
+    var option = document.createElement("option");
+    option.text = rec.id;
+    listEl.add(option);
+  }
+}
+
+
+function removeOptions(selectElement) {
+  var i, L = selectElement.options.length - 1;
+  for (i = L; i >= 0; i--) {
+    selectElement.remove(i);
+  }
+}
+
+function getSelectedID(selObj) {
+  //alert(selObj.value);
+  const selectedBrewery = allData.filter((brewery) => {
+    return brewery.id === selObj.value;
+  });
+  //get brewery attributes
+  brLat = selectedBrewery[0].latitude;
+  brLon = selectedBrewery[0].longitude;
+  //plot selected brewery on map
+  initMap();
+}
+
+
+
+
 
