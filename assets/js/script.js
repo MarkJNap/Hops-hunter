@@ -223,24 +223,40 @@ function getFilteredBreweries() {
   const result = allData.filter((brewery) => {
     //return person.age < 21 ? true : false
     var filterValue = inputEl.value;
+    var h2Mid;
+  
     if (selectedRadioId === "rAllData") {
+     //h2Middle = "All Breweries";
       return allData;
     }
     else if (selectedRadioId === "rCountry") {
+      //h2Middle = "All Breweries in  country ";
       return brewery.country === filterValue;
     }
     else if (selectedRadioId === "rState") {
+      //h2Middle = "All Breweries in  state ";
       return brewery.state === filterValue;
     }
     else if (selectedRadioId === "rCity") {
+      //h2Middle = "All Breweries in  city ";
       return brewery.city === filterValue;
     }
     else if (selectedRadioId === "rPostCode") {
+      //h2Middle = "All Breweries in  postcode ";
       return brewery.postal_code === filterValue;
     }
 
   })
+  var  selectionBox = document.getElementById ("iInput");
+ 
+  //h2Middle = h2Middle + selectionBox.value;
+
+  var  h2M = document.getElementById ("h2Middle");
+  h2M.innerHTML = "All Breweries in " + selectionBox.value;
+
   //populate selections 
+ 
+
 
   for (rec of result) {
     var option = document.createElement("option");
@@ -289,15 +305,7 @@ function getSelectedID(selObj) {
 
     "</div>" +
     "</div>";
-
-
-
-
-
-
-
-
-  //plot selected brewery on map
+//plot selected brewery on map
   initMap();
 }
 
