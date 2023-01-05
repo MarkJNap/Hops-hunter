@@ -6,6 +6,7 @@ var dMeta = {};
 var totalRecords;
 var allData = [];
 //all values
+var breweryIds = [];
 var brewery_type = [];
 var city = [];
 var country = [];
@@ -22,9 +23,10 @@ var brLat = -34.397;
 var brLon = 150.644;
 
 
-//breweryButtonEl.addEventListener("click", getApi)
+
 breweryButtonEl.addEventListener("click", getFilteredBreweries);
-mapButtonEl.addEventListener("click", initMap);
+//mapButtonEl.addEventListener("click", initMap);
+mapButtonEl.addEventListener("click", addFavoriteBreweryToLocalStorage);
 
 function displayData() {
   //alert(allData.length);
@@ -33,6 +35,7 @@ function displayData() {
   ucountry = Array.from(new Set(country));
   upostal_code = Array.from(new Set(postal_code));
   ustate = Array.from(new Set(state));
+
 }
 
 //This function is activated when loading the body of the document, 
@@ -40,6 +43,7 @@ function displayData() {
 
 function getApi() {
   requestUrl = "https://api.openbrewerydb.org/breweries/meta"
+
   fetch(requestUrl)
     .then(function (response) {
       console.log(response);
@@ -56,38 +60,39 @@ function getApi() {
 //https://api.openbrewerydb.org/breweries?page=15&per_page=50
 
 var perPage = 50;
+var counter = 0;
 function getApiRecords() {
   var nPages = Math.ceil(totalRecords / perPage);
-  for (i = 1; i < nPages + 1; i++) {
+  for (var i = 1; i < nPages + 1; i++) {
     var requestUrl = "https://api.openbrewerydb.org/breweries?page=" + i + "&per_page=" + perPage;
     fetch(requestUrl)
       .then(function (response) {
-        //console.log(response);
         return response.json()
       })
       .then(function (data) {
-        for (j = 0; j < data.length; j++) {
-
+        for (var j = 0; j < data.length; j++) {
           allData.push(data[j]);
-
-
+          breweryIds.push(data[j].id);
           brewery_type.push(data[j].brewery_type);
           city.push(data[j].city);
           country.push(data[j].country);
           postal_code.push(data[j].postal_code);
           state.push(data[j].state);
+          counter++;
+          if (counter == totalRecords) {
+            getFavoriteBreweries();
+          }
         }
         console.log(data);
       });
-
   }
-
 }
+
 
 
 //===============MAP=============================
 let map;
-// This example displays a marker at the center of Australia.
+// This example displays a marker centered at the selected brewery.
 // When the user clicks the marker, an info window opens.
 function initMap() {
   const br = { lat: +brLat, lng: +brLon };
@@ -113,11 +118,8 @@ function initMap() {
     });
   });
 }
-
-
-
-
 window.initMap = initMap;
+
 
 
 //Get and manage selected option from the radioButtons
@@ -171,9 +173,11 @@ function myfunction(event) {
 
 
 
-//Populate input boxe based on selected option
+//Populate input box based on selected option
 //=========================================================
 //code adaped and modified form https://codingartistweb.com/2021/12/autocomplete-suggestions-on-input-field-with-javascript/
+
+
 
 //Execute function on keyup
 inputEl.addEventListener("keyup", (e) => {
@@ -203,6 +207,7 @@ function displayNames(value) {
   inputEl.value = value;
   removeElements();
 }
+
 function removeElements() {
   //clear all the item
   let items = document.querySelectorAll(".list-items");
@@ -210,6 +215,50 @@ function removeElements() {
     item.remove();
   });
 }
+
+
+//============================
+//Populate sfavorite breweries list from the local stoarge
+var aFavoriteBreweries;
+function getFavoriteBreweries() {
+  listEl = document.getElementById("listFavorites");
+  //Clear any existing elements in this list 
+  removeOptions(listEl);
+  //Read the data from the local storage into an object array
+  aFavoriteBreweries = [];
+  for (const [key, value] of Object.entries(localStorage)) {
+    if (breweryIds.includes(value)) {
+      console.log(key, value);
+      //POPULATE LIST
+      aFavoriteBreweries.push(key);
+      //ADD BREWERY IN FAV LIST
+      var option = document.createElement("option");
+      option.text = value;
+      listEl.add(option);
+    }
+  }
+}
+
+//add items form fafovorites list to local storage
+function addFavoriteBreweryToLocalStorage() {
+  if (!aFavoriteBreweries.includes(breweryId)) {
+    aFavoriteBreweries.push(breweryId);
+    localStorage.setItem(breweryId, breweryId);
+
+    //UPDATE DISPLAY LIST
+    listEl = document.getElementById("listFavorites");
+    //Clear FAV List and local storage
+    removeOptions(listEl);
+    //localStorage.clear();
+    //ADD BREWERY IN FAV LIST & and Local storage
+    for (var brId of aFavoriteBreweries) {
+      var option = document.createElement("option");
+      option.text = brId;
+      listEl.add(option);
+    }
+  }
+}
+//============================
 
 
 
@@ -220,44 +269,34 @@ function getFilteredBreweries() {
   //Clear Existing Elements
   removeOptions(listEl);
 
-  const result = allData.filter((brewery) => {
-    //return person.age < 21 ? true : false
+  var result = allData.filter((brewery) => {
     var filterValue = inputEl.value;
     var h2Mid;
 
     if (selectedRadioId === "rAllData") {
-      //h2Middle = "All Breweries";
       return allData;
     }
     else if (selectedRadioId === "rCountry") {
-      //h2Middle = "All Breweries in  country ";
       return brewery.country === filterValue;
     }
     else if (selectedRadioId === "rState") {
-      //h2Middle = "All Breweries in  state ";
       return brewery.state === filterValue;
     }
     else if (selectedRadioId === "rCity") {
-      //h2Middle = "All Breweries in  city ";
       return brewery.city === filterValue;
     }
     else if (selectedRadioId === "rPostCode") {
-      //h2Middle = "All Breweries in  postcode ";
       return brewery.postal_code === filterValue;
     }
-
   })
   var selectionBox = document.getElementById("iInput");
-
-  //h2Middle = h2Middle + selectionBox.value;
-
   var h2M = document.getElementById("h2Middle");
   h2M.innerHTML = "All Breweries in " + selectionBox.value;
 
   //populate selections 
-
-
-
+  if (selectedRadioId === "rAllData" || selectedRadioId == undefined) {
+    result = allData;
+  }
   for (rec of result) {
     var option = document.createElement("option");
     option.text = rec.id;
@@ -265,13 +304,13 @@ function getFilteredBreweries() {
   }
 }
 
-
 function removeOptions(selectElement) {
   var i, L = selectElement.options.length - 1;
   for (i = L; i >= 0; i--) {
     selectElement.remove(i);
   }
 }
+
 
 
 var contentString;
@@ -301,12 +340,14 @@ function getSelectedID(selObj) {
     "<p>" + "Street: " + selectedBrewery[0].street + "<p>" +
     "<p>" + "Name: " + selectedBrewery[0].name + "<p>" +
     "<p>" + "Phone: " + selectedBrewery[0].phone + "<p>" +
+    "<p>" + "Latitude: " + selectedBrewery[0].latitude + "<p>" +
+    "<p>" + "Longitude: " + selectedBrewery[0].longitude + "<p>" +
     //'<p><a href=' + '"'+ selectedBrewery[0].website_url+'</a></p> "' +
-
     "</div>" +
     "</div>";
   //plot selected brewery on map
   initMap();
+
 }
 
 
