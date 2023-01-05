@@ -1,33 +1,38 @@
 // Brewery API info https://www.openbrewerydb.org/documentation
 
-let mapButtonEl = document.getElementById("map-btn")
-let breweryButtonEl = document.getElementById("brewery-btn")
+let btnAddToFavorites = document.getElementById("fav-btn");
+let btnListBreweries = document.getElementById("brewery-btn");
+
+//dMeta contains meta-data. Is used to fetch data such as total number of recors ( totalRecords) in the API
 var dMeta = {};
 var totalRecords;
+
+//initialisation of arrays to contain all arecords in each rorespong field
 var allData = [];
-//all values
+var breweryIds = [];
 var brewery_type = [];
 var city = [];
 var country = [];
-var postal_code = []
+var postal_code = [];
 var state = [];
-//Unique values
+
+//Unique values arrays. u- prefix stands for "unique"
 var ubrewery_type = [];
 var ucity = [];
 var ucountry = [];
-var upostal_code = []
+var upostal_code = [];
 var ustate = [];
 
+//initialise default coordinates
 var brLat = -34.397;
 var brLon = 150.644;
 
 
-//breweryButtonEl.addEventListener("click", getApi)
-breweryButtonEl.addEventListener("click", getFilteredBreweries);
-mapButtonEl.addEventListener("click", initMap);
+btnListBreweries.addEventListener("click", getFilteredBreweries);
+btnAddToFavorites.addEventListener("click", addFavoriteBreweryToLocalStorage);
 
-function displayData() {
-  //alert(allData.length);
+//Gets distinct value arrays to be used primarilly in the autocomplete function
+function getDistinctValueArrays() {
   ubrewery_type = Array.from(new Set(brewery_type));
   ucity = Array.from(new Set(city));
   ucountry = Array.from(new Set(country));
@@ -36,14 +41,15 @@ function displayData() {
 }
 
 //This function is activated when loading the body of the document, 
-//to read in all available data and prepopulate the arrays with unique values
+//It reads in all the available data and prepopulates the arrays with unique/discting values
 
 function getApi() {
   requestUrl = "https://api.openbrewerydb.org/breweries/meta"
+
   fetch(requestUrl)
     .then(function (response) {
       console.log(response);
-      return response.json()
+      return response.json();
     })
     .then(function (dataM) {
       totalRecords = dataM.total;
@@ -52,42 +58,45 @@ function getApi() {
     })
 }
 
-//Loop through the records and get all data into array
-//https://api.openbrewerydb.org/breweries?page=15&per_page=50
+//Loop through all pages in the API and get all records into arrays
+//maximum number of records constraint,fetched at once is 50: https://api.openbrewerydb.org/breweries?page=15&per_page=50
+//dataAll array contains all records
+//other arrays contain corresponding field. array names are self-explanatory
 
 var perPage = 50;
+var counter = 0;
 function getApiRecords() {
   var nPages = Math.ceil(totalRecords / perPage);
-  for (i = 1; i < nPages + 1; i++) {
+  for (var i = 1; i < nPages + 1; i++) {
     var requestUrl = "https://api.openbrewerydb.org/breweries?page=" + i + "&per_page=" + perPage;
     fetch(requestUrl)
       .then(function (response) {
-        //console.log(response);
-        return response.json()
+        return response.json();
       })
       .then(function (data) {
-        for (j = 0; j < data.length; j++) {
-
+        for (var j = 0; j < data.length; j++) {
           allData.push(data[j]);
-
-
+          breweryIds.push(data[j].id);
           brewery_type.push(data[j].brewery_type);
           city.push(data[j].city);
           country.push(data[j].country);
           postal_code.push(data[j].postal_code);
           state.push(data[j].state);
+          counter++;
+          if (counter == totalRecords) {
+            getFavoriteBreweries();
+          }
         }
         console.log(data);
       });
-
   }
-
 }
 
 
-//===============MAP=============================
+
+//===============MAP PLOT FUNCTION=============================
 let map;
-// This example displays a marker at the center of Australia.
+// This example displays a marker centered at the selected brewery.
 // When the user clicks the marker, an info window opens.
 function initMap() {
   const br = { lat: +brLat, lng: +brLon };
@@ -114,10 +123,9 @@ function initMap() {
   });
 }
 
-
-
-
 window.initMap = initMap;
+//===============END OF MAP PLOT FUNCTION=====================
+
 
 
 //Get and manage selected option from the radioButtons
@@ -131,7 +139,7 @@ inputEl.placeholder = "All data";
 var selectedRadioId;
 function myfunction(event) {
 
-  displayData();
+  getDistinctValueArrays();
   selectedRadioId = event.currentTarget.id;
   console.log('Checked radio with ID = ' + selectedRadioId);
   if (selectedRadioId === "rAllData") {
@@ -163,18 +171,13 @@ function myfunction(event) {
   else {
     alert("This option is not available yet ! ");
   }
-  // inputEl = document.getElementById(selectedInputId);
-  //populateList(selectedInputId);
-  //alert('Checked radio with ID = ' + selectedRadioId)
 }
 
 
 
-
-//Populate input boxe based on selected option
-//=========================================================
+//-------------------------------------------------------
+//Populate input box based on selected option
 //code adaped and modified form https://codingartistweb.com/2021/12/autocomplete-suggestions-on-input-field-with-javascript/
-
 //Execute function on keyup
 inputEl.addEventListener("keyup", (e) => {
   //Initially remove all elements ( so if user erases a letter or adds new letter then clean previous outputs)
@@ -203,6 +206,8 @@ function displayNames(value) {
   inputEl.value = value;
   removeElements();
 }
+
+//Remove any elements from the autocomplete list that pop ups under the inlut control
 function removeElements() {
   //clear all the item
   let items = document.querySelectorAll(".list-items");
@@ -210,54 +215,87 @@ function removeElements() {
     item.remove();
   });
 }
+//-------------------------------------------------
+
+//============================
+//read persistent data from local storage (i.e. brewery Ids) and populate favorite breweries list
+var aFavoriteBreweries;
+function getFavoriteBreweries() {
+  listEl = document.getElementById("listFavorites");
+  //Clear any existing elements in this list 
+  removeOptions(listEl);
+  //Read the data from the local storage into an object array
+  aFavoriteBreweries = [];
+  for (const [key, value] of Object.entries(localStorage)) {
+    if (breweryIds.includes(value)) {
+      console.log(key, value);
+      //POPULATE LIST
+      aFavoriteBreweries.push(key);
+      //ADD BREWERY IN FAV LIST
+      var option = document.createElement("option");
+      option.text = value;
+      listEl.add(option);
+    }
+  }
+}
+
+
+//add items form fafovorites list to local storage
+function addFavoriteBreweryToLocalStorage() {
+  if (!aFavoriteBreweries.includes(breweryId)) {
+    aFavoriteBreweries.push(breweryId);
+    localStorage.setItem(breweryId, breweryId);
+
+    //UPDATE DISPLAY LIST
+    listEl = document.getElementById("listFavorites");
+    //Clear FAV List and local storage
+    removeOptions(listEl);
+    //localStorage.clear();
+    //ADD BREWERY IN FAV LIST & and Local storage
+    for (var brId of aFavoriteBreweries) {
+      var option = document.createElement("option");
+      option.text = brId;
+      listEl.add(option);
+    }
+  }
+}
+//============================
 
 
 
-//Populate selected filtered breweries options list [middle field]
+//Filter and populate selected filtered breweries options list [middle field]
 function getFilteredBreweries() {
-
   listEl = document.getElementById("listControl");
   //Clear Existing Elements
   removeOptions(listEl);
 
-  const result = allData.filter((brewery) => {
-    //return person.age < 21 ? true : false
+  var result = allData.filter((brewery) => {
     var filterValue = inputEl.value;
     var h2Mid;
 
     if (selectedRadioId === "rAllData") {
-      //h2Middle = "All Breweries";
       return allData;
     }
     else if (selectedRadioId === "rCountry") {
-      //h2Middle = "All Breweries in  country ";
       return brewery.country === filterValue;
     }
     else if (selectedRadioId === "rState") {
-      //h2Middle = "All Breweries in  state ";
       return brewery.state === filterValue;
     }
     else if (selectedRadioId === "rCity") {
-      //h2Middle = "All Breweries in  city ";
       return brewery.city === filterValue;
     }
     else if (selectedRadioId === "rPostCode") {
-      //h2Middle = "All Breweries in  postcode ";
       return brewery.postal_code === filterValue;
     }
-
   })
   var selectionBox = document.getElementById("iInput");
-
-  //h2Middle = h2Middle + selectionBox.value;
-
   var h2M = document.getElementById("h2Middle");
   h2M.innerHTML = "All Breweries in " + selectionBox.value;
-
   //populate selections 
-
-
-
+  if (selectedRadioId === "rAllData" || selectedRadioId == undefined) {
+    result = allData;
+  }
   for (rec of result) {
     var option = document.createElement("option");
     option.text = rec.id;
@@ -266,6 +304,8 @@ function getFilteredBreweries() {
 }
 
 
+
+//Removes any existing items in the display list
 function removeOptions(selectElement) {
   var i, L = selectElement.options.length - 1;
   for (i = L; i >= 0; i--) {
@@ -274,8 +314,10 @@ function removeOptions(selectElement) {
 }
 
 
+
 var contentString;
 var breweryId;
+
 function getSelectedID(selObj) {
   //alert(selObj.value);
   const selectedBrewery = allData.filter((brewery) => {
@@ -284,10 +326,8 @@ function getSelectedID(selObj) {
   //get brewery attributes
   brLat = selectedBrewery[0].latitude;
   brLon = selectedBrewery[0].longitude;
-
-
   breweryId = selectedBrewery[0].id;
-
+  //Set up popup window content
   contentString =
     '<div id="content">' +
     '<div id="siteNotice">' +
@@ -301,8 +341,10 @@ function getSelectedID(selObj) {
     "<p>" + "Street: " + selectedBrewery[0].street + "<p>" +
     "<p>" + "Name: " + selectedBrewery[0].name + "<p>" +
     "<p>" + "Phone: " + selectedBrewery[0].phone + "<p>" +
-    //'<p><a href=' + '"'+ selectedBrewery[0].website_url+'</a></p> "' +
-
+    "<p>" + "Latitude: " + selectedBrewery[0].latitude + "<p>" +
+    "<p>" + "Longitude: " + selectedBrewery[0].longitude + "<p>" +
+    '<p>Website URL : <a href="' + selectedBrewery[0].website_url + '">' +
+    '"' + selectedBrewery[0].website_url + '</a></p> ' +
     "</div>" +
     "</div>";
   //plot selected brewery on map

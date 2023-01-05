@@ -81,77 +81,50 @@
                         </div>
                     </div>
                     <div>
-                        <button class="button is-primary is-rounded" type="button" id="brewery-btn">Brewery
-                            List</button>
-                        <button class="button is-warning " type="button" id="map-btn">Map</button>
+                        <button class="button is-primary is-rounded" type="button" id="brewery-btn">Show brewery
+                            list</button>
+                        <button class="button is-warning " type="button" id="fav-btn">Add to favorites</button>
                     </div>
                 </section>
 
-
-                <!-- <section class="box">
-                    <h2 class="is-size-4">Previous Searches:</h2>
-                    <p> Example Search</p>
-                </section> -->
                 <section class="box">
                     <h2 class="is-size-4">Favourited Breweries:</h2>
-                    <p> Example Saved Brewery</p>
+                    <!-- <p> Example Saved Brewery</p> -->
+
+
+                    <div class="field">
+                        <span class="select is-fullwidth">
+                            <select id="listFavorites" multiple size="5" onchange="getSelectedID(this)">
+                                <!-- <option value="Argentina">Argentina</option>
+                                    <option value="Bolivia">Bolivia</option>
+                                    <option value="Venezuela">Venezuela</option> -->
+                            </select>
+                        </span>
+                    </div>
+
+                    
                 </section>
+                
             </aside>
 
 
             <!-- Main Searched information -->
             <section class="box container column is-4">
                 <h2 id="h2Middle" class="title box">Breweries List</h2>
-                <h6> selected breweries: </h2>
-                    <div class="field">
-                        <p class="control">
-                            <span class="select is-fullwidth">
-                                <select id="listControl" multiple size="10" onchange="getSelectedID(this)">
-                                    <!-- <option value="Argentina">Argentina</option>
+                <p> selected breweries: </p>
+
+                <div class="field">
+                    <span class="select is-fullwidth">
+                        <select id="listControl" multiple size="10" onchange="getSelectedID(this)">
+                            <!-- <option value="Argentina">Argentina</option>
                                 <option value="Bolivia">Bolivia</option>
                                 <option value="Suriname">Suriname</option>
                                 <option value="Uruguay">Uruguay</option>
                                 <option value="Venezuela">Venezuela</option> -->
-                                </select>
-                            </span>
-                        </p>
-                    </div>
-
+                        </select>
                     </span>
-
-
-
-
-                    <!-- <article>
-                    <h2>Brewery Name</h2>
-                    <p>type, address, number</p>
-                </article>
-                <article>
-                    <h2>Brewery Name</h2>
-                    <p>type, address, number</p>
-                </article>
-                <article>
-                    <h2>Brewery Name</h2>
-                    <p>type, address, number</p>
-                </article>
-                <article>
-                    <h2>Brewery Name</h2>
-                    <p>type, address, number</p>
-                </article>
-                <article>
-                    <h2>Brewery Name</h2>
-                    <p>type, address, number</p>
-                </article>
-                <article>
-                    <h2>Brewery Name</h2>
-                    <p>type, address, number</p>
-                </article> -->
-
-
-
-
+                </div>
             </section>
-
             <section class="box container column is-4">
                 <div id="map"> </div>
             </section>
