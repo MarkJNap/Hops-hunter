@@ -14,97 +14,77 @@
 
 <body onload="getApi()">
     <form autocomplete="off">
-        <!-- navbar -->
-        <header class="navbar has-shadow">
-            <section class="navbar-brand">
-                <h1 class="title navbar-item">Brewery Finder</h1>
-            </section>
-            <!-- <section class="navbar-menu">
-                <div class="navbar-end">
-                    <a href="#" class="navbar-item">Link 1</a>
-                    <a href="#" class="navbar-item">Link 2</a>
-                </div>
-            </section> -->
+        <!-- Header -->
+        <header class="section has-background-success-dark">
+            <h1 class="title has-text-white has-text-centered">Hops Hunter</h1>
+            <p class="subtitle has-text-white has-text-centered">Your best stop for locating a Brewery in any location!
+            </p>
         </header>
 
         <main class="section columns">
             <!-- Search input, searched history and saved breweries -->
-            <aside class="container column is-3">
-
-                <section class="box is-ancestor">
-
-                    <div class="tile is-ancestor">
-                        <div class="tile is-vertical">
-                            <div class="tile">
-                                <div class="tile is-child is-vertical is-5">
-
-                                    <fieldset class="fieldset">
-                                        <legend>Select option</legend>
-                                        <div class="control">
-                                            <label class="radio"> <input id="rAllData" type="radio" name="mapOption"
-                                                    checked> All Data </label>
-                                        </div>
-
-                                        <div>
-                                            <label class="radio"> <input id="rCountry" type="radio" name="mapOption">
-                                                Country</label>
-                                        </div>
-
-                                        <div class="control">
-                                            <label class="radio"> <input id="rState" type="radio" name="mapOption">
-                                                State </label>
-                                        </div>
-
-                                        <div>
-                                            <label class="radio"> <input id="rCity" type="radio" name="mapOption">
-                                                City </label>
-                                        </div>
-
-                                        <div>
-                                            <label class="radio"> <input id="rPostCode" type="radio" name="mapOption">
-                                                Post code
-                                            </label>
-
-                                        </div>
-                                    </fieldset>
-
+            <aside class="column is-3">
+                <section class="box has-background-success-dark">
+                    <div class="box has-background-success-light">
+                        <div>
+                            <fieldset class="fieldset">
+                                <legend class="has-text-success-dark">Select search:</legend>
+                                <div class="control">
+                                    <label class="radio"> <input id="rAllData" type="radio" name="mapOption" checked>
+                                        All Data </label>
                                 </div>
-                                <div class="tile is-child">
-                                    <fieldset class="fieldset">
-                                        <legend>Select</legend>
-                                        <input class="is-pulled-right" type="text" id="iInput" placeholder="Country">
-                                        <ul class="list"></ul>
 
-                                    </fieldset>
+                                <div class="control">
+                                    <label class="radio"> <input id="rCountry" type="radio" name="mapOption"> Country
+                                    </label>
                                 </div>
-                            </div>
+
+                                <div class="control">
+                                    <label class="radio"> <input id="rState" type="radio" name="mapOption"> State
+                                    </label>
+                                </div>
+
+                                <div class="control">
+                                    <label class="radio"> <input id="rCity" type="radio" name="mapOption"> City
+                                    </label>
+                                </div>
+
+                                <div class="control">
+                                    <label class="radio"> <input id="rPostCode" type="radio" name="mapOption"> Post code
+                                    </label>
+                                </div>
+                            </fieldset>
+                        </div>
+                        <div>
+                            <fieldset class="fieldset">
+                                <legend class="has-text-success-dark">Location:</legend>
+                                <input class="input" type="text" id="iInput" placeholder="Country">
+                                <ul class="list"></ul>
+                            </fieldset>
                         </div>
                     </div>
-                    <div>
-                        <button class="button is-primary is-rounded" type="button" id="brewery-btn">Show brewery
-                            list</button>
-                        <button class="button is-warning " type="button" id="fav-btn">Add to favorites</button>
+
+                    <div class="buttons is-centered">
+                        <button class="button is-success is-rounded is-medium is-responsive" type="button"
+                            id="brewery-btn">Search breweries</button>
+                        <button class="button is-warning" type="button" id="fav-btn">Add to favorites</button>
                     </div>
                 </section>
 
-                <section class="box">
-                    <h2 class="is-size-4">Favourited Breweries:</h2>
-                    <!-- <p> Example Saved Brewery</p> -->
-
-
+                <section class="box has-background-success-dark">
+                    <h2 class="is-size-4 has-text-white">Favourited Breweries:</h2>
                     <div class="field">
-                        <span class="select is-fullwidth">
-                            <select id="listFavorites" multiple size="5" onchange="getSelectedID(this)">
+                        <span class="select is-multiple is-fullwidth">
+                            <select class="has-background-success-light" id="listFavorites" multiple size="5"
+                                onchange="getSelectedID(this)">
                                 <!-- <option value="Argentina">Argentina</option>
                                     <option value="Bolivia">Bolivia</option>
                                     <option value="Venezuela">Venezuela</option> -->
                             </select>
                         </span>
                     </div>
-
-                    
                 </section>
-                
+
             </aside>
 
 
@@ -117,10 +97,7 @@
                     <span class="select is-fullwidth">
                         <select id="listControl" multiple size="10" onchange="getSelectedID(this)">
                             <!-- <option value="Argentina">Argentina</option>
-                                <option value="Bolivia">Bolivia</option>
-                                <option value="Suriname">Suriname</option>
-                                <option value="Uruguay">Uruguay</option>
-                                <option value="Venezuela">Venezuela</option> -->
+                                <option value="Bolivia">Bolivia</option> -->
                         </select>
                     </span>
                 </div>
@@ -136,8 +113,7 @@
         </footer>
 
         <script src="./assets/js/script.js"></script>
-        <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyC-YDTUfwYgINCwNa3Gsoh-jvuEWaHMEis"
-            defer> </script>
+        <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyC-YDTUfwYgINCwNa3Gsoh-jvuEWaHMEis" defer></script>
     </form>
 </body>
 
