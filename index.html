@@ -15,19 +15,19 @@
 <body onload="getApi()">
     <form autocomplete="off">
         <!-- Header -->
-        <header class="section has-background-success-dark">
+        <header class="section has-background-success-dark py-3">
             <h1 class="title has-text-white has-text-centered">Hops Hunter</h1>
             <p class="subtitle has-text-white has-text-centered">Your best stop for locating a Brewery in any location!
             </p>
         </header>
 
-        <main class="section columns">
+        <main class="section columns py-3 px-1">
             <!-- Search input, searched history and saved breweries -->
             <aside class="column is-3">
-                <section class="box has-background-success-dark">
-                    <div class="box has-background-success-light">
+                <section class="box has-background-success-dark pt-1 pb-2">
+                    <div class="box has-background-success-light pt-0 pb-1 px-0">
                         <div>
-                            <fieldset class="fieldset">
+                            <fieldset class="fieldset py-1">
                                 <legend class="has-text-success-dark">Select search:</legend>
                                 <div class="control">
                                     <label class="radio"> <input id="rAllData" type="radio" name="mapOption" checked>
@@ -56,7 +56,7 @@
                             </fieldset>
                         </div>
                         <div>
-                            <fieldset class="fieldset">
+                            <fieldset class="fieldset p-1">
                                 <legend class="has-text-success-dark">Location:</legend>
                                 <input class="input" type="text" id="iInput" placeholder="Country">
                                 <ul class="list"></ul>
@@ -89,26 +89,29 @@
 
 
             <!-- Main Searched information -->
-            <section class="box container column is-4">
-                <h2 id="h2Middle" class="title box">Breweries List</h2>
-                <p> selected breweries: </p>
-
-                <div class="field">
-                    <span class="select is-fullwidth">
-                        <select id="listControl" multiple size="10" onchange="getSelectedID(this)">
+            <section class="container column is-3 px-0">
+                <div class="box has-background-success-dark" id="middleColumn">
+                    <h2 id="h2Middle" class="title box has-background-success has-text-centered">Breweries</h2>
+                    <p class="is-size-6 has-text-white pb-1">Choose a brewery from the list</p>
+                    <div class="field">
+                        <span class="select is-multiple is-fullwidth pb-2">
+                            <select class="has-background-success-light" id="listControl" multiple size="10" onchange="getSelectedID(this)">
                             <!-- <option value="Argentina">Argentina</option>
                                 <option value="Bolivia">Bolivia</option> -->
-                        </select>
-                    </span>
+                            </select>
+                        </span>
+                    </div>
                 </div>
             </section>
-            <section class="box container column is-4">
-                <div id="map"> </div>
+
+            <section class="container column is-6 px-1">
+                <div class="box has-background-success-dark" id="map">
+                </div>
             </section>
         </main>
 
         <!-- Footer -->
-        <footer class="footer">
+        <footer class="footer py-0">
             <h4 class="has-text-centered">Made by Mark, Panos, Sam, Tesfa</h4>
         </footer>
 
