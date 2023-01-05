@@ -4,6 +4,10 @@
     width: 100%;
 }
 
+#middleColumn {
+    height: 100%;
+}
+
 .fieldset {
     background-color: rgb(255, 255, 255);
     border-radius: 6px;
@@ -40,4 +44,11 @@
 .list-items:hover {
     background-color: rgb(231, 255, 229);
     border-radius: 15px;
+}
+
+@media only screen and (max-width: 800px) {
+    #map {
+        height: 60vh;
+        width: 100%;
+    }
 }
