@@ -24,10 +24,10 @@
         <main class="section columns py-3 px-1">
             <!-- Search input, searched history and saved breweries -->
             <aside class="column is-3">
-                <section class="box has-background-success-dark pt-1 pb-2">
-                    <div class="box has-background-success-light pt-0 pb-1 px-0">
+                <section class="box has-background-success-dark pt-1 pb-0">
+                    <div class="box has-background-success-light pt-0 pb-1 px-0 mb-2">
                         <div>
-                            <fieldset class="fieldset py-1">
+                            <fieldset class="fieldset p-1">
                                 <legend class="has-text-success-dark">Select search:</legend>
                                 <div class="control">
                                     <label class="radio"> <input id="rAllData" type="radio" name="mapOption" checked>
@@ -64,10 +64,9 @@
                         </div>
                     </div>
 
-                    <div class="buttons is-centered">
+                    <div class="buttons is-centered pt-0">
                         <button class="button is-success is-rounded is-medium is-responsive" type="button"
                             id="brewery-btn">Search breweries</button>
-                        <button class="button is-warning" type="button" id="fav-btn">Add to favorites</button>
                     </div>
                 </section>
 
@@ -75,7 +74,7 @@
                     <h2 class="is-size-4 has-text-white">Favourited Breweries:</h2>
                     <div class="field">
                         <span class="select is-multiple is-fullwidth">
-                            <select class="has-background-success-light" id="listFavorites" multiple size="5"
+                            <select class="has-background-success-light" id="listFavourites" multiple size="5"
                                 onchange="getSelectedID(this)">
                                 <!-- <option value="Argentina">Argentina</option>
                                     <option value="Bolivia">Bolivia</option>
@@ -83,8 +82,10 @@
                             </select>
                         </span>
                     </div>
+                    <div class="buttons is-centered">
+                        <button class="button is-danger is-medium is-responsive is-rounded is-focused" type="button" id="clear-btn">Clear Favourites</button>
+                    </div>
                 </section>
-
             </aside>
 
 
@@ -100,6 +101,9 @@
                                 <option value="Bolivia">Bolivia</option> -->
                             </select>
                         </span>
+                    </div>
+                    <div class="buttons is-centered">
+                        <button class="button is-warning is-medium is-responsive is-rounded is-focused" type="button" id="fav-btn">Add to Favourites</button>
                     </div>
                 </div>
             </section>
