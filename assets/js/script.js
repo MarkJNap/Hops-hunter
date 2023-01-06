@@ -1,7 +1,8 @@
 // Brewery API info https://www.openbrewerydb.org/documentation
 
-let btnAddToFavorites = document.getElementById("fav-btn");
+let btnAddToFavourites = document.getElementById("fav-btn");
 let btnListBreweries = document.getElementById("brewery-btn");
+let btnClearFavourites = document.getElementById("clear-btn")
 
 //dMeta contains meta-data. Is used to fetch data such as total number of recors ( totalRecords) in the API
 var dMeta = {};
@@ -29,7 +30,8 @@ var brLon = 150.644;
 
 
 btnListBreweries.addEventListener("click", getFilteredBreweries);
-btnAddToFavorites.addEventListener("click", addFavoriteBreweryToLocalStorage);
+btnAddToFavourites.addEventListener("click", addFavouriteBreweryToLocalStorage);
+btnClearFavourites.addEventListener("click", clearLocalStorage);
 
 //Gets distinct value arrays to be used primarilly in the autocomplete function
 function getDistinctValueArrays() {
@@ -84,7 +86,7 @@ function getApiRecords() {
           state.push(data[j].state);
           counter++;
           if (counter == totalRecords) {
-            getFavoriteBreweries();
+            getFavouriteBreweries();
           }
         }
         console.log(data);
@@ -218,19 +220,19 @@ function removeElements() {
 //-------------------------------------------------
 
 //============================
-//read persistent data from local storage (i.e. brewery Ids) and populate favorite breweries list
-var aFavoriteBreweries;
-function getFavoriteBreweries() {
-  listEl = document.getElementById("listFavorites");
+//read persistent data from local storage (i.e. brewery Ids) and populate favourite breweries list
+var aFavouriteBreweries;
+function getFavouriteBreweries() {
+  listEl = document.getElementById("listFavourites");
   //Clear any existing elements in this list 
   removeOptions(listEl);
   //Read the data from the local storage into an object array
-  aFavoriteBreweries = [];
+  aFavouriteBreweries = [];
   for (const [key, value] of Object.entries(localStorage)) {
     if (breweryIds.includes(value)) {
       console.log(key, value);
       //POPULATE LIST
-      aFavoriteBreweries.push(key);
+      aFavouriteBreweries.push(key);
       //ADD BREWERY IN FAV LIST
       var option = document.createElement("option");
       option.text = value;
@@ -240,25 +242,33 @@ function getFavoriteBreweries() {
 }
 
 
-//add items form fafovorites list to local storage
-function addFavoriteBreweryToLocalStorage() {
-  if (!aFavoriteBreweries.includes(breweryId)) {
-    aFavoriteBreweries.push(breweryId);
+//add items from favourites list to local storage
+function addFavouriteBreweryToLocalStorage() {
+  if (!aFavouriteBreweries.includes(breweryId)) {
+    aFavouriteBreweries.push(breweryId);
     localStorage.setItem(breweryId, breweryId);
 
     //UPDATE DISPLAY LIST
-    listEl = document.getElementById("listFavorites");
+    listEl = document.getElementById("listFavourites");
     //Clear FAV List and local storage
     removeOptions(listEl);
     //localStorage.clear();
     //ADD BREWERY IN FAV LIST & and Local storage
-    for (var brId of aFavoriteBreweries) {
+    for (var brId of aFavouriteBreweries) {
       var option = document.createElement("option");
       option.text = brId;
       listEl.add(option);
+      console.log(option);
     }
   }
 }
+
+//clear items from local storage
+function clearLocalStorage () {
+  localStorage.clear();
+  removeOptions(listEl);
+}
+
 //============================
 
 
@@ -271,7 +281,6 @@ function getFilteredBreweries() {
 
   var result = allData.filter((brewery) => {
     var filterValue = inputEl.value;
-    var h2Mid;
 
     if (selectedRadioId === "rAllData") {
       return allData;
@@ -303,8 +312,6 @@ function getFilteredBreweries() {
   }
 }
 
-
-
 //Removes any existing items in the display list
 function removeOptions(selectElement) {
   var i, L = selectElement.options.length - 1;
@@ -312,7 +319,6 @@ function removeOptions(selectElement) {
     selectElement.remove(i);
   }
 }
-
 
 
 var contentString;
