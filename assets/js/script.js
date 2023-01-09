@@ -265,7 +265,11 @@ function addFavouriteBreweryToLocalStorage() {
 
 //clear items from local storage
 function clearLocalStorage () {
+  //Clear local storage
   localStorage.clear();
+  //clear existing favorits list
+  aFavouriteBreweries=[];
+  //update list control
   var listFavEl = document.getElementById("listFavourites");
   removeOptions(listFavEl);
 }
