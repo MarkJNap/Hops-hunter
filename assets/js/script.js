@@ -57,6 +57,7 @@ function getApi() {
       totalRecords = dataM.total;
       // console.log(data);
       getApiRecords();
+      initMap();
     })
 }
 
