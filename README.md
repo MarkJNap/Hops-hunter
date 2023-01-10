@@ -19,27 +19,61 @@ The APIs we are using are the [Open Brewery](https://www.openbrewerydb.org/docum
 ---
 
 ## Usage 
-## *UPDATE BEFORE FINAL RELEASE*
 
-To use this app the user needs to first pick how they would like to search either by selecting Country, State, City, or Post code. When an option is selected and when they type in the search field results are updated in a dropdown list of all our possible breweries that match their input. After they hit the search button the Breweries List in the center is populated with the results and if they click on a result it will open up a map showing its location. At this point they are able to add it to their favourites to be easily searched again and it is saved to local storage to be remembered on refresh. The user is also able to hover over and click the map marker for more detailed information about their selected brewery such as the breweries Website,Phone number, and Street information.
+To use this app the user needs to first pick how they would like to search either by selecting Country, State, City, or Post code. When an option is selected and when they type in the search field, results are updated in a dropdown list of all our possible breweries that match their input. After they hit the search button the Breweries List in the center is populated with the results and if they click on a result it will open up a map showing its location. At this point they are able to add it to their favourites to be easily searched again and it is saved to local storage to be remembered on refresh. The user is also able to hover over and click the map marker for more detailed information about their selected brewery such as the breweries Website, Phone number, and Street information.
 
-GitHub Pages Link : *LINK GOES HERE*
-Demo of website in use : *FILL IN LINK*
-*[<img src="/assets/images/EXAMPLETEXT.gif" alt="Hops Hunter App Demo"/>](/assets/images/EXAMPLETEXT.gif)*
+GitHub Pages Link: https://markjnap.github.io/Hops-hunter/
+Demo of website in use: 
+
+*[<img src="/assets/images/hops-hunter-demo.gif" alt="Hops Hunter App Demo"/>](/assets/images/hops-hunter-demo.gif)*
 
 ---
-
 ## Credits
 
 Mark Napolitano
-Sam
-Panos
-Tesfa
+Samuel Cooke
+Panos Gian
+Tesfa Weldemichael
 
 ---
 
 ## License
 MIT License
+
+---
+---
+
+## USER STORY
+As a user 
+I want to find a brewery in an area that I plan to visit
+So that I can see what is local to the area
+
+## ACCEPTANCE CRITERIA
+
+
+* GIVEN I would like to find a brewery in an area
+
+* WHEN I load the app
+* THEN I see a clean and mobile friendly design
+
+* WHEN I select a search option
+* THEN only results for my search option are available (E.G. City or Country)
+
+* WHEN I search for a location
+* THEN local breweries are listed
+
+* WHEN I click a listed brewery
+* THEN I am shown a map of its location
+
+* WHEN I click add to favourites
+* THEN It is stored in local storage and added to a favourites list
+
+* WHEN I click the map marker
+* THEN I am shown more detailed information including Website, Phone Number and Street information
+
+## WIREFRAME
+
+![Wireframe](/assets/images/Wireframe_1.png)
 
 ---
 
@@ -72,32 +106,7 @@ Create own user stories and acceptance criteria.
 - Have a quality README (including a unique name, 
     description, technologies used screenshot, 
     and a link to the deployed application).
-    
-## USER STORY
-As a user 
-I want to find a brewery in an area that I plan to visit
-So that I can see what is local to the area
 
-## ACCEPTANCE CRIRERIA
-
-
-* GIVEN I WOULD LIKE TO FIND A BREWERY IN AN AREA
-
-* WHEN I LOAD THE APP, THEN I SEE A CLEAN AND MOBILE FRIENDLY DESIGN
-    
-* WHEN I SEARCH FOR A CTIY, THEN IT IS SAVED IN PREVIOUS SEARCH
-
-* WHEN I SEARCH FOR A CITY, THEN UP TO 10 LOCAL BREWERIES ARE LISTED
-
-* WHEN I CLICK A LISTED BREWERY, THEN I AM SHOWN A NEW PAGE
-* WHEN I VIEW THE NEW PAGE, THEN I AM PRESENTED WITH A MAP WITH A PIN IN THE BREWERY LOCATION, ABILITY TO VISIT WEBSITE, AND CAN GO BACK TO MAIN PAGE
-* Then it is added to the favorites list
-
-## WIREFRAME
-
-![Wireframe](/assets/images/Wireframe_1.png)
-
----
 
 ## Presentation Requirements
 Use this Project Presentation Template [Link](https://docs.google.com/presentation/d/10QaO9KH8HtUXj__81ve0SZcpO5DbMbqqQr4iPpbwKks/edit#slide=id.p) to address the following:
@@ -167,3 +176,5 @@ Your presentation should follow the Project Presentation Template from above.
 
 ## Collaboration 10%
 There are no major disparities in the number of GitHub contributions between group members.
+
+---
