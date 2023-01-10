@@ -4,36 +4,37 @@ let btnAddToFavourites = document.getElementById("fav-btn");
 let btnListBreweries = document.getElementById("brewery-btn");
 let btnClearFavourites = document.getElementById("clear-btn")
 
-//dMeta contains meta-data. Is used to fetch data such as total number of recors ( totalRecords) in the API
+// dMeta contains meta-data. It is used to fetch data such as total number of records (totalRecords) in the API
 var dMeta = {};
 var totalRecords;
 
-//initialisation of arrays to contain all arecords in each rorespong field
+// Initialisation of arrays to contain all records in each correspondence field
 var allData = [];
 var breweryIds = [];
+var breweryNames = [];
 var brewery_type = [];
 var city = [];
 var country = [];
 var postal_code = [];
 var state = [];
 
-//Unique values arrays. u- prefix stands for "unique"
+// Unique values arrays. u- prefix stands for "unique"
 var ubrewery_type = [];
 var ucity = [];
 var ucountry = [];
 var upostal_code = [];
 var ustate = [];
 
-//initialise default coordinates
+// Initialise default coordinates
 var brLat = -34.397;
 var brLon = 150.644;
 
-
+// Event Listeners
 btnListBreweries.addEventListener("click", getFilteredBreweries);
 btnAddToFavourites.addEventListener("click", addFavouriteBreweryToLocalStorage);
 btnClearFavourites.addEventListener("click", clearLocalStorage);
 
-//Gets distinct value arrays to be used primarilly in the autocomplete function
+// Gets distinct value arrays to be used primarilly in the autocomplete function
 function getDistinctValueArrays() {
   ubrewery_type = Array.from(new Set(brewery_type));
   ucity = Array.from(new Set(city));
@@ -42,15 +43,15 @@ function getDistinctValueArrays() {
   ustate = Array.from(new Set(state));
 }
 
-//This function is activated when loading the body of the document, 
-//It reads in all the available data and prepopulates the arrays with unique/discting values
+// This function is activated when loading the body of the document, 
+// It reads in all the available data and prepopulates the arrays with unique/distinct values
 
 function getApi() {
   requestUrl = "https://api.openbrewerydb.org/breweries/meta"
 
   fetch(requestUrl)
     .then(function (response) {
-      console.log(response);
+      // console.log(response);
       return response.json();
     })
     .then(function (dataM) {
@@ -60,10 +61,10 @@ function getApi() {
     })
 }
 
-//Loop through all pages in the API and get all records into arrays
-//maximum number of records constraint,fetched at once is 50: https://api.openbrewerydb.org/breweries?page=15&per_page=50
-//dataAll array contains all records
-//other arrays contain corresponding field. array names are self-explanatory
+// Loop through all pages in the API and get all records into arrays
+// maximum number of records constraint,fetched at once is 50: https://api.openbrewerydb.org/breweries?page=15&per_page=50
+// dataAll array contains all records
+// other arrays contain corresponding field. array names are self-explanatory
 
 var perPage = 50;
 var counter = 0;
@@ -79,6 +80,7 @@ function getApiRecords() {
         for (var j = 0; j < data.length; j++) {
           allData.push(data[j]);
           breweryIds.push(data[j].id);
+          breweryNames.push(data[j].name)
           brewery_type.push(data[j].brewery_type);
           city.push(data[j].city);
           country.push(data[j].country);
@@ -89,12 +91,10 @@ function getApiRecords() {
             getFavouriteBreweries();
           }
         }
-        console.log(data);
+        // console.log(data);
       });
   }
 }
-
-
 
 //===============MAP PLOT FUNCTION=============================
 let map;
@@ -114,7 +114,8 @@ function initMap() {
   const marker = new google.maps.Marker({
     position: br,
     map,
-    title: breweryId,
+    // title: breweryId,
+    title: breweryName,
   });
 
   marker.addListener("click", () => {
@@ -128,16 +129,14 @@ function initMap() {
 window.initMap = initMap;
 //===============END OF MAP PLOT FUNCTION=====================
 
-
-
-//Get and manage selected option from the radioButtons
+// Get and manage selected option from the radioButtons
 document.querySelectorAll("input[name='mapOption']").forEach((input) => {
   input.addEventListener('change', myfunction);
 });
 var selectedList = [];
 let inputEl = document.getElementById("iInput");
 inputEl.value = "";
-inputEl.placeholder = "All data";
+inputEl.placeholder = "All Breweries";
 var selectedRadioId;
 function myfunction(event) {
 
@@ -147,7 +146,7 @@ function myfunction(event) {
   if (selectedRadioId === "rAllData") {
     inputEl.value = "";
     selectedList = allData;
-    inputEl.placeholder = "All data";
+    inputEl.placeholder = "All Breweries";
   }
 
   else if (selectedRadioId === "rCountry") {
@@ -175,43 +174,40 @@ function myfunction(event) {
   }
 }
 
-
-
 //-------------------------------------------------------
-//Populate input box based on selected option
-//code adaped and modified form https://codingartistweb.com/2021/12/autocomplete-suggestions-on-input-field-with-javascript/
-//Execute function on keyup
+// Populate input box based on selected option
+// Code adapted and modified from https://codingartistweb.com/2021/12/autocomplete-suggestions-on-input-field-with-javascript/
+// Execute function on keyup
 inputEl.addEventListener("keyup", (e) => {
-  //Initially remove all elements ( so if user erases a letter or adds new letter then clean previous outputs)
+  // Initially remove all elements (so if user erases a letter or adds new letter then clean previous outputs)
   removeElements();
   for (let i of selectedList) {
-    //convert input to lowercase and compare with each string
+    // Convert input to lowercase and compare with each string
     if (i.toLowerCase().startsWith(inputEl.value.toLowerCase()) && inputEl.value != "") {
-      //create li element=============
+      // Create li element
       let listItem = document.createElement("li");
-      //One common class name
+      // One common class name
       listItem.classList.add("list-items");
       listItem.style.cursor = "pointer";
       listItem.setAttribute("onclick", "displayNames('" + i + "')");
-      //Display matched part in bold
+      // Display matched part in bold
       let word = "<b>" + i.substr(0, inputEl.value.length) + "</b>";
       word += i.substr(inputEl.value.length);
-      //display the value in array
+      // Display the value in array
       listItem.innerHTML = word;
       document.querySelector(".list").appendChild(listItem);
     }
   }
 });
-//}
 
 function displayNames(value) {
   inputEl.value = value;
   removeElements();
 }
 
-//Remove any elements from the autocomplete list that pop ups under the inlut control
+// Remove any elements from the autocomplete list that pop ups under the input control
 function removeElements() {
-  //clear all the item
+  // Clear all the items
   let items = document.querySelectorAll(".list-items");
   items.forEach((item) => {
     item.remove();
@@ -219,21 +215,21 @@ function removeElements() {
 }
 //-------------------------------------------------
 
-//============================
-//read persistent data from local storage (i.e. brewery Ids) and populate favourite breweries list
+// Read persistent data from local storage (i.e. brewery names) and populate favourite breweries list
 var aFavouriteBreweries;
 function getFavouriteBreweries() {
   listEl = document.getElementById("listFavourites");
-  //Clear any existing elements in this list 
+  // Clear any existing elements in this list 
   removeOptions(listEl);
-  //Read the data from the local storage into an object array
+  // Read the data from the local storage into an object array
   aFavouriteBreweries = [];
   for (const [key, value] of Object.entries(localStorage)) {
-    if (breweryIds.includes(value)) {
+    // if (breweryIds.includes(value)) {
+    if (breweryNames.includes(value)) {
       console.log(key, value);
-      //POPULATE LIST
+      //Populate list
       aFavouriteBreweries.push(key);
-      //ADD BREWERY IN FAV LIST
+      //Add brewery in favourites list
       var option = document.createElement("option");
       option.text = value;
       listEl.add(option);
@@ -241,43 +237,42 @@ function getFavouriteBreweries() {
   }
 }
 
-
-//add items from favourites list to local storage
+// Add items from favourites list to local storage
 function addFavouriteBreweryToLocalStorage() {
-  if (!aFavouriteBreweries.includes(breweryId)) {
-    aFavouriteBreweries.push(breweryId);
-    localStorage.setItem(breweryId, breweryId);
+  // if (!aFavouriteBreweries.includes(breweryId)) {
+  //   aFavouriteBreweries.push(breweryId);
+  //   localStorage.setItem(breweryId, breweryId);
+  if (!aFavouriteBreweries.includes(breweryName)) {
+    aFavouriteBreweries.push(breweryName);
+    localStorage.setItem(breweryName, breweryName);
 
-    //UPDATE DISPLAY LIST
+    // Update display list
     listEl = document.getElementById("listFavourites");
-    //Clear FAV List and local storage
+    // Clear Favourites List
     removeOptions(listEl);
-    //localStorage.clear();
-    //ADD BREWERY IN FAV LIST & and Local storage
-    for (var brId of aFavouriteBreweries) {
+    // Add brewery to Fav list & and Local storage
+    // for (var brId of aFavouriteBreweries) {
+    for (var brName of aFavouriteBreweries) {
       var option = document.createElement("option");
-      option.text = brId;
+      // option.text = brId;
+      option.text = brName;
       listEl.add(option);
       console.log(option);
     }
   }
 }
 
-//clear items from local storage
+// Clear items from local storage ******** CURRENTLY NOT WORKING AS INTENDED ********
 function clearLocalStorage () {
   localStorage.clear();
   var listFavEl = document.getElementById("listFavourites");
   removeOptions(listFavEl);
 }
 
-//============================
-
-
-
-//Filter and populate selected filtered breweries options list [middle field]
+// Filter and populate selected filtered breweries list
 function getFilteredBreweries() {
   listEl = document.getElementById("listControl");
-  //Clear Existing Elements
+  // Clear Existing Elements
   removeOptions(listEl);
 
   var result = allData.filter((brewery) => {
@@ -302,18 +297,19 @@ function getFilteredBreweries() {
   var selectionBox = document.getElementById("iInput");
   var h2M = document.getElementById("h2Middle");
   h2M.innerHTML = "All Breweries in " + selectionBox.value;
-  //populate selections 
+  // Populate selections 
   if (selectedRadioId === "rAllData" || selectedRadioId == undefined) {
     result = allData;
   }
   for (rec of result) {
     var option = document.createElement("option");
-    option.text = rec.id;
+    // option.text = rec.id;
+    option.text = rec.name;
     listEl.add(option);
   }
 }
 
-//Removes any existing items in the display list
+// Removes any existing items in the display list
 function removeOptions(selectElement) {
   var i, L = selectElement.options.length - 1;
   for (i = L; i >= 0; i--) {
@@ -324,22 +320,25 @@ function removeOptions(selectElement) {
 
 var contentString;
 var breweryId;
+var breweryName;
 
 function getSelectedID(selObj) {
-  //alert(selObj.value);
   const selectedBrewery = allData.filter((brewery) => {
-    return brewery.id === selObj.value;
+    // return brewery.id === selObj.value;
+    return brewery.name === selObj.value;
   });
-  //get brewery attributes
+  // Get brewery attributes
   brLat = selectedBrewery[0].latitude;
   brLon = selectedBrewery[0].longitude;
-  breweryId = selectedBrewery[0].id;
-  //Set up popup window content
+  // breweryId = selectedBrewery[0].id;
+  breweryName = selectedBrewery[0].name;
+  // Set up popup window content
   contentString =
     '<div id="content">' +
     '<div id="siteNotice">' +
     "</div>" +
-    '<h1 id="firstHeading" class="firstHeading"><b>' + selectedBrewery[0].id + '</b></h1>' +
+    // '<h1 id="firstHeading" class="firstHeading"><b>' + selectedBrewery[0].id + '</b></h1>' +
+    '<h1 id="firstHeading" class="firstHeading"><b>' + selectedBrewery[0].name + '</b></h1>' +
     '<div id="bodyContent">' +
     "<p>" + "Brewery type: " + selectedBrewery[0].brewery_type + "<p>" +
     "<p>" + "Country: " + selectedBrewery[0].country + "<p>" +
@@ -354,11 +353,6 @@ function getSelectedID(selObj) {
     '"' + selectedBrewery[0].website_url + '</a></p> ' +
     "</div>" +
     "</div>";
-  //plot selected brewery on map
+  // Plot selected brewery on map
   initMap();
 }
-
-
-
-
-
