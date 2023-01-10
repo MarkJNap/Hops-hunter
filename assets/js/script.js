@@ -143,7 +143,7 @@ function myfunction(event) {
 
   getDistinctValueArrays();
   selectedRadioId = event.currentTarget.id;
-  console.log('Checked radio with ID = ' + selectedRadioId);
+  // console.log('Checked radio with ID = ' + selectedRadioId);
   if (selectedRadioId === "rAllData") {
     inputEl.value = "";
     selectedList = allData;
@@ -227,7 +227,7 @@ function getFavouriteBreweries() {
   for (const [key, value] of Object.entries(localStorage)) {
     // if (breweryIds.includes(value)) {
     if (breweryNames.includes(value)) {
-      console.log(key, value);
+      // console.log(key, value);
       //Populate list
       aFavouriteBreweries.push(key);
       //Add brewery in favourites list
@@ -258,12 +258,12 @@ function addFavouriteBreweryToLocalStorage() {
       // option.text = brId;
       option.text = brName;
       listEl.add(option);
-      console.log(option);
+      // console.log(option);
     }
   }
 }
 
-// Clear items from local storage ******** CURRENTLY NOT WORKING AS INTENDED ********
+// Clear items from local storage
 function clearLocalStorage () {
   //Clear local storage
   localStorage.clear();
